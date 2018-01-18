@@ -1,3 +1,8 @@
 <items gfxroot="gfx/items/" version="1">
     <active name="Lootbox" description="Pride and Accomplishment" maxcharges="0" gfx="lootbox.png" />
+    <passive name="Trash Lootchest"     cache="" description="Its loot?"    gfx="trash_lootchest.png" />
+    <passive name="Common Lootchest"    cache="" description="Cheers!"      gfx="common_lootchest.png" />
+    <passive name="Rare Lootchest"      cache="" description="noice!"       gfx="rare_lootchest.png" />
+    <passive name="Epic Lootchest"      cache="" description="Epic Loot!"   gfx="epic_lootchest.png" />
+    <passive name="Legendary Lootchest" cache="" description="w00t!"        gfx="legendary_lootchest.png" />
 </items>
