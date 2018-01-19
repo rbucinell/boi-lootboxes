@@ -3,30 +3,32 @@
     <name>Lootboxes</name>
     <directory>boi-lootboxes</directory>
     <id>1266340384</id>
-    <description>The intent is to provide players with a sense of pride and accomplishment for acquiring different items.
+    <description>[h1]Introduction[/h1]
+
+The intent is to provide players with a sense of [b]pride and accomplishment[/b] for acquiring different items.
 As for cost, I selected initial values based upon data from the main game and other adjustments made to gate off rewards before launch.
 Among other things, I’m looking at average per-player coin drop rates on a run basis, and I’ll be making constant adjustments to ensure that players have items that are compelling, rewarding, and of course attainable via gameplay.
 I appreciate the candid feedback, and the passion the community has put forth around the current topics on Reddit, Discord, and across numerous Lua tutorial sites.
 My team (me) will continue to make changes and monitor community feedback and update everyone as soon and as often as I can.
 
------
+[h1] Mechanics [/h1]
 
-Memes aside, I am proud to introduce AAA gaming mechanics to the Binding of Isaac! The Lootboxes introduces a new Item call Lootbox. If you find this in the treasure or item pool shop you can use to spawn 3 loot chests of varying quality. 
-In order to entice users to play, the Lootbox will give you one free play but then disappear. If you have 25 cents then you will pay for Lootbox to spawn 3 new loot chests and it won’t disappear.
+Memes aside, I am proud to introduce AAA gaming mechanics to the Binding of Isaac! The Lootboxes mod introduces a new active item called "Lootbox". It can be found in the treasure and shop item pools. This is a zero cost active item. However if you don't pay you will lose it. You only get one free, because making AAA content is too expensive. If you have 25 cents, it will deduct that amount, but you will keep the active item. Using the item will cause 3 "Lootchests" to spawn. Every chest has a chance to drop epic loot, however your odds will increase with a better quality chest. Also the better the chest, the better chance of an item being a higher tier of item.
 
-The Loot Chests :
-Every chest has a chance(tm) to drop epic loot, however the better quality loot chest, the better loot you may get.
-Trash – May spawn troll bombs, or basic consumables 
-Common – Most likely to spawn consumables, pickups, or lower quality items
-Rare, Epic, Legendary – Each chest has increased odds of getting better items, respectively.
+[u]The Lootchests[/u]
+Trash [brown] – May spawn troll bombs, or basic consumables 
+Common [green] – Most likely to spawn consumables, pickups, or lower quality items
+Rare [blue], Epic [yellow], Legendary [red] – Each chest has increased odds of getting better items, respectively.
 
------
+[h1] Notes [/h1]
+I've added support for External item descriptions, for anyone who uses that amazing mod as well.
 
-I would like to give a big thanks to reddit’s r/themoddingofisaac, the discord channel, and Item ranks (http://www.isaacranks.com/afterbirthplus/ranks ) for tier sorted items.
+[h1] Thanks [/h1]
 
-------
+I would like to give a big thanks to the [url=https://www.reddit.com/r/themoddingofisaac/]themoddingofisaac[/url] subreddit and the respective discord channel for the modding help.
 
-I've added support for External item descriptions, for anyone who uses that amazing mod as well.</description>
+Thanks to [url=http://www.isaacranks.com/afterbirthplus/ranks]Tristan Seligmann's ItemRanks[/url] for housing the items in a ranked order, which I used gate items into different lootchests
+</description>
     <version>1.4</version>
     <visibility>Public</visibility>
     <tag id="Lua"/>
