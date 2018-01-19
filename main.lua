@@ -47,6 +47,75 @@ local lootchests = {
     LootboxesMod.LOOTCHEST_LEGENDARY
 }
 
+--[[
+    Enums that define what can be spawned for "Pickups"
+    --https://github.com/locou/Zona-Pellucida/blob/master/main.lua
+]]
+LootboxesMod.PickupKeys = {"keys", "bombs", "coins", "hearts"};
+LootboxesMod.PickupEnums = {
+    keys = {
+      Variant = PickupVariant.PICKUP_KEY,
+      SubTypes = {
+        KeySubType.KEY_NORMAL,
+        KeySubType.KEY_DOUBLEPACK,
+        --KeySubType.KEY_GOLDEN,
+        --KeySubType.KEY_CHARGED
+      }
+    },
+    bombs = {
+      Variant = PickupVariant.PICKUP_BOMB,
+      SubTypes = {
+        BombSubType.BOMB_NORMAL,
+        BombSubType.BOMB_DOUBLEPACK,
+        --BombSubType.BOMB_GOLDEN
+      }
+    },
+    coins = {
+      Variant = PickupVariant.PICKUP_COIN,
+      SubTypes = {
+        CoinSubType.COIN_PENNY,
+        CoinSubType.COIN_DOUBLEPACK,
+        CoinSubType.COIN_NICKEL,
+        CoinSubType.COIN_STICKYNICKEL,
+        --CoinSubType.COIN_DIME
+      }
+    },
+    hearts = {
+      Variant = PickupVariant.PICKUP_HEART,
+      SubTypes = {
+        HeartSubType.HEART_HALF,
+        HeartSubType.HEART_FULL,
+        HeartSubType.HEART_DOUBLEPACK,
+        HeartSubType.HEART_HALF_SOUL,
+        HeartSubType.HEART_SOUL,
+        HeartSubType.HEART_BLENDED,
+        HeartSubType.HEART_BLACK,
+        --HeartSubType.HEART_GOLDEN,
+        --HeartSubType.HEART_ETERNAL
+      }
+    }
+  };
+
+--[[
+    Enums that define what can be spawned for "Consumables"
+    --https://github.com/locou/Zona-Pellucida/blob/master/main.lua
+]]
+LootboxesMod.ConsumableKeys = {"trinket", "pill", "card", "grabbag"}
+LootboxesMod.ConumableEnums = {
+    trinket = {
+        Variant = PickupVariant.PICKUP_TRINKET
+    },
+    pill = {
+        Variant = PickupVariant.PICKUP_PILL
+    },
+    card = {
+        Variant = PickupVariant.PICKUP_TAROTCARD
+    },
+    grabbag = {
+        Variant = PickupVariant.PICKUP_GRAB_BAG 
+    }
+}
+
 --[[Hook into External Item Descriptions Mod]]
 -- 2. Make sure we're not adding to a nil table
 if not __eidItemDescriptions then
@@ -94,4 +163,204 @@ function LootboxesMod:eLogWrite(str)
     end
 end
 LootboxesMod:AddCallback(ModCallbacks.MC_POST_RENDER, LootboxesMod.eLogDraw);
+
+
+--[[This will spawn the item at the begining of the run ]]
+function LootboxesMod:onUpdate(player)
+    if Game():GetFrameCount() == 1 then
+        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.COLLECTIBLE_LOOTBOX, Vector(320,300), v0, nil )
+        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_TRASH, Vector(220,300), Vector(0,0), nil )
+        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_COMMON, Vector(270,300), Vector(0,0), nil )
+        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_RARE, Vector(320,300), Vector(0,0), nil )
+		--Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_EPIC, Vector(370,300), Vector(0,0), nil )
+        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_LEGENDARY, Vector(370,300), Vector(0,0), nil )
+    end
+end
+LootboxesMod:AddCallback( ModCallbacks.MC_POST_PEFFECT_UPDATE, LootboxesMod.onUpdate );
+
+
+--[[ Use Item callback handler for The Lootbox ]]
+function LootboxesMod:UseLootbox()
+    player = Isaac.GetPlayer(0);    
+
+    local leftPos   = Vector( player.Position.X - offset,   player.Position.Y )
+    local midPos    = Vector( player.Position.X,            player.Position.Y )
+    local rightPos  = Vector( player.Position.X + offset,   player.Position.Y )
+    
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod:PickLootChest(player.Luck), Isaac.GetFreeNearPosition(leftPos, offset),  v0, nil )
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod:PickLootChest(player.Luck), Isaac.GetFreeNearPosition(midPos, offset),   v0, nil )
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod:PickLootChest(player.Luck), Isaac.GetFreeNearPosition(rightPos, offset), v0, nil )
+
+    if player:GetNumCoins() >= priceToPlay then
+        player:AddCoins( -priceToPlay )
+        LootboxesMod:eLogWrite( "Paid " .. priceToPlay .. " gold");
+    else
+        player:RemoveCollectible( LootboxesMod.COLLECTIBLE_LOOTBOX )
+        LootboxesMod:eLogWrite( "Remove lootbox");
+    end	
+    
+end
+LootboxesMod:AddCallback(ModCallbacks.MC_USE_ITEM, LootboxesMod.UseLootbox, LootboxesMod.COLLECTIBLE_LOOTBOX);
+
+--[[ This function rolls for which loot chest to drop based on player's Luck]]
+function LootboxesMod:PickLootChest( luck )
+    local r = math.random( 1 ,100 )  + luck;
+    local retChest = LootboxesMod.LOOTCHEST_TRASH;
+
+    if r < threshold["common"] then
+        retChest = LootboxesMod.LOOTCHEST_TRASH
+    elseif r >= threshold["common"] and r < threshold["rare"] then
+        retChest = LootboxesMod.LOOTCHEST_COMMON
+    elseif r >= threshold["rare"] and r < threshold["epic"] then
+        retChest = LootboxesMod.LOOTCHEST_RARE
+    elseif r >= threshold["epic"] and r < threshold["legendary"] then
+        retChest = LootboxesMod.LOOTCHEST_EPIC
+    elseif r >= threshold["legendary"] then
+        retChest = LootboxesMod.LOOTCHEST_LEGENDARY
+    end
+    return retChest
+end
+
+
+--[[ After picking up loot chest, remove it from passive and open the chest]]
+function LootboxesMod:pickupUpdate( pickup )
+    player = Isaac.GetPlayer(0);
+    for n = 1, #lootchests do
+        if player:HasCollectible( lootchests[n] ) then
+            player:RemoveCollectible( lootchests[n] )
+            LootboxesMod:OpenChest( lootchests[n] )
+        end
+    end
+end
+LootboxesMod:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, LootboxesMod.pickupUpdate);
+
+--[[ Open the chests!]]
+function LootboxesMod:OpenChest( lootchest_id )
+    player = Isaac.GetPlayer(0);
+
+    if lootchest_id == LootboxesMod.LOOTCHEST_TRASH then
+        LootboxesMod:eLogWrite( "Open LOOTCHEST_TRASH");
+        LootboxesMod:SpawnBasedOnLootTable( trash_rates );
+    elseif lootchest_id == LootboxesMod.LOOTCHEST_COMMON then
+        LootboxesMod:eLogWrite( "Open LOOTCHEST_COMMON");
+        LootboxesMod:SpawnBasedOnLootTable( common_rates );
+    elseif lootchest_id == LootboxesMod.LOOTCHEST_RARE then
+        LootboxesMod:eLogWrite( "Open LOOTCHEST_RARE");
+        LootboxesMod:SpawnBasedOnLootTable( rare_rates );
+    elseif lootchest_id == LootboxesMod.LOOTCHEST_EPIC then
+        LootboxesMod:SpawnBasedOnLootTable( epic_rates );
+        LootboxesMod:eLogWrite( "Open LOOTCHEST_EPIC");
+    elseif lootchest_id == LootboxesMod.LOOTCHEST_LEGENDARY then
+        LootboxesMod:eLogWrite( "Open LOOTCHEST_LEGENDARY");
+        LootboxesMod:SpawnBasedOnLootTable( legendary_rates );
+    end
+end
+
+--[[ Read the Rate table for the chest that was opened, selects reward based roll ]]
+function LootboxesMod:SpawnBasedOnLootTable( rate_table )
+    local rolledType = math.random();
+    LootboxesMod:eLogWrite( "reward type roll: " .. rolledType );
+
+    local rewardType = 1;
+    for i, rate in ipairs(rate_table) do
+        if rolledType < rate_table[i] then
+            rewardType = i
+            LootboxesMod:eLogWrite( "rewarding => " .. i );
+            break
+        end
+    end    
+
+    if rewardType == 1 then
+        LootboxesMod:SpawnRewardTroll()
+    elseif rewardType == 2 then
+        LootboxesMod:SpawnRewardPickup()
+    elseif rewardType == 3 then 
+        LootboxesMod:SpawnRewardConsumable()
+    elseif rewardType == 4 then
+        LootboxesMod:SpawnRewardItem("D")
+    elseif rewardType == 5 then 
+        LootboxesMod:SpawnRewardItem("C")
+    elseif rewardType == 6 then
+        LootboxesMod:SpawnRewardItem("B")
+    elseif rewardType == 7 then 
+        LootboxesMod:SpawnRewardItem("A")
+    elseif rewardType == 8 then
+        LootboxesMod:SpawnRewardItem("S")
+    end
+end
+
+--[[ Bad luck for the player, spawns a troll bomb at their feet]]
+function LootboxesMod:SpawnRewardTroll()
+    local player = Isaac.GetPlayer(0);
+    Isaac.Spawn(EntityType.ENTITY_BOMBDROP, BombVariant.BOMB_TROLL, 0, Vector( player.Position.X - 50, player.Position.Y ), Vector(0, 0), player)
+end
+
+--[[ Spawn a random pickup from mods' pickup pool ]]
+function LootboxesMod:SpawnRewardPickup()
+    local player = Isaac.GetPlayer(0);
+    local pick = LootboxesMod.PickupEnums[ LootboxesMod.PickupKeys[ math.random( table.length(LootboxesMod.PickupEnums) ) ] ]
+    local varient = pick.Variant
+    local sub = pick.SubTypes[math.random(table.length(pick.SubTypes))]
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, varient, sub, Isaac.GetFreeNearPosition(player.Position, offset) , Vector(0, 0), player)
+end
+
+--[[ Spawn a random consumable from mods' consumable pool ]]
+function LootboxesMod:SpawnRewardConsumable()
+    local player = Isaac.GetPlayer(0);
+    local itempool = game:GetItemPool();
+    local seeds = game:GetSeeds();
+    local seed = seeds:GetNextSeed();
+
+    local chosen = LootboxesMod.ConumableEnums[ LootboxesMod.ConsumableKeys[ math.random( table.length(LootboxesMod.ConumableEnums) )] ];
+    local varient = chosen.Variant;
+
+    local sub = nil;
+    if varient == PickupVariant.PICKUP_TRINKET then
+        sub = itempool:GetTrinket();
+    elseif varient == PickupVariant.PICKUP_PILL then
+        sub = itempool:GetPill(seed)
+    elseif varient == PickupVariant.PICKUP_TAROTCARD then
+        sub = itempool:GetCard( seed, true, true, false )
+    else
+        sub = 0
+    end
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, varient, sub, Isaac.GetFreeNearPosition(player.Position, offset) , Vector(0, 0), player)
+end
+
+--[[ Spawns an item in a given tier group. The tiers are defined as a percentage of items above]]
+function LootboxesMod:SpawnRewardItem( tier )
+    local player = Isaac.GetPlayer(0);
+    
+    local rankedLen = table.length( rankings );
+    local max = rankedLen;
+    local min = 1;
+
+    if tier == "D" then
+        max = rankedLen
+        min = (1 - tiers["D"]) * rankedLen
+    elseif tier == "C" then
+        max = (1 - tiers["D"]) * rankedLen
+        min = (1 - tiers["C"]) * rankedLen
+    elseif tier == "B" then
+        max = (1 - tiers["C"]) * rankedLen
+        min = (1 - tiers["B"]) * rankedLen
+    elseif tier == "A" then
+        max = (1 - tiers["B"]) * rankedLen
+        min = (1 - tiers["A"]) * rankedLen
+    elseif tier == "S" then
+        player:AnimateHappy();
+        max = (1 - tiers["A"]) * rankedLen
+        min = 1
+    end
+    LootboxesMod:eLogWrite( "(".. math.floor(min) .. "," ..  math.floor(max) .. ")" .. tiers["A"] .. ", " .. rankedLen);
+
+    min = math.floor( min )
+    max = math.floor( max )
+
+    local tier_roll = math.floor( math.random( min, max ) );
+    LootboxesMod:eLogWrite( "tier roll = " .. tier_roll );
+
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, rankings[tier_roll], Isaac.GetFreeNearPosition(player.Position, offset), Vector(0,0), nil )
+
+end
 
