@@ -8,6 +8,11 @@ local LootboxesMod = RegisterMod("Lootboxes", 1 );
 LootboxesMod.DEBUG = false;
 
 LootboxesMod.COLLECTIBLE_LOOTBOX    = Isaac.GetItemIdByName( "Lootbox" )
+LootboxesMod.LOOTCHEST_TRASH        = Isaac.GetItemIdByName( "Trash Lootchest" )
+LootboxesMod.LOOTCHEST_COMMON       = Isaac.GetItemIdByName( "Common Lootchest" )
+LootboxesMod.LOOTCHEST_RARE         = Isaac.GetItemIdByName( "Rare Lootchest" )
+LootboxesMod.LOOTCHEST_EPIC         = Isaac.GetItemIdByName( "Epic Lootchest" )
+LootboxesMod.LOOTCHEST_LEGENDARY    = Isaac.GetItemIdByName( "Legendary Lootchest" )
 
 
 --[[ Logging Functions ]]
