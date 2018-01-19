@@ -51,6 +51,19 @@ local lootchests = {
     LootboxesMod.LOOTCHEST_LEGENDARY
 }
 
+--[[Hook into External Item Descriptions Mod]]
+-- 2. Make sure we're not adding to a nil table
+if not __eidItemDescriptions then
+    __eidItemDescriptions = {};
+  end
+  -- 3. Add the description
+  __eidItemDescriptions[LootboxesMod.COLLECTIBLE_LOOTBOX] = "Open a lookbox. Pay 25g or lose item after use";
+  __eidItemDescriptions[LootboxesMod.LOOTCHEST_TRASH]     = "Poor quality chest";
+  __eidItemDescriptions[LootboxesMod.LOOTCHEST_COMMON]    = "Standard quality chest";
+  __eidItemDescriptions[LootboxesMod.LOOTCHEST_RARE]      = "Good quality chest";
+  __eidItemDescriptions[LootboxesMod.LOOTCHEST_EPIC]      = "Great quality chest";
+  __eidItemDescriptions[LootboxesMod.LOOTCHEST_LEGENDARY] = "Best quality chest, high odds for high tier items";
+
 --[[ Logging Functions ]]
 local eLog = {"Log:"}
 function LootboxesMod:eLogDraw()
