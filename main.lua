@@ -1,7 +1,3 @@
--- Reference: G:\Steam\steamapps\common\The Binding of Isaac Rebirth\resources
--- https://moddingofisaac.com/docs/
-
-
 --[[Initialize the Mod and its items]]
 local game = Game()
 local LootboxesMod = RegisterMod("Lootboxes", 1 );
@@ -63,6 +59,21 @@ if not __eidItemDescriptions then
   __eidItemDescriptions[LootboxesMod.LOOTCHEST_RARE]      = "Good quality chest";
   __eidItemDescriptions[LootboxesMod.LOOTCHEST_EPIC]      = "Great quality chest";
   __eidItemDescriptions[LootboxesMod.LOOTCHEST_LEGENDARY] = "Best quality chest, high odds for high tier items";
+
+
+--[ Other variables to use ]
+local v0 = Vector(0,0);
+local offset = 50;
+
+--[[ Generic Helper functions ]]
+
+function table.length(table)
+    local count = 0
+    for _ in pairs(table) do
+        count = count + 1
+    end
+    return count
+end
 
 --[[ Logging Functions ]]
 local eLog = {"Log:"}
