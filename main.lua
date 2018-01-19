@@ -169,11 +169,11 @@ LootboxesMod:AddCallback(ModCallbacks.MC_POST_RENDER, LootboxesMod.eLogDraw);
 function LootboxesMod:onUpdate(player)
     if Game():GetFrameCount() == 1 then
         --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.COLLECTIBLE_LOOTBOX, Vector(320,300), v0, nil )
-        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_TRASH, Vector(220,300), Vector(0,0), nil )
-        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_COMMON, Vector(270,300), Vector(0,0), nil )
-        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_RARE, Vector(320,300), Vector(0,0), nil )
-		--Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_EPIC, Vector(370,300), Vector(0,0), nil )
-        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_LEGENDARY, Vector(370,300), Vector(0,0), nil )
+        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_TRASH, Vector(220,300), v0, nil )
+        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_COMMON, Vector(270,300), v0, nil )
+        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_RARE, Vector(320,300), v0, nil )
+		--Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_EPIC, Vector(370,300), v0, nil )
+        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_LEGENDARY, Vector(370,300), v0, nil )
     end
 end
 LootboxesMod:AddCallback( ModCallbacks.MC_POST_PEFFECT_UPDATE, LootboxesMod.onUpdate );
@@ -292,7 +292,7 @@ end
 --[[ Bad luck for the player, spawns a troll bomb at their feet]]
 function LootboxesMod:SpawnRewardTroll()
     local player = Isaac.GetPlayer(0);
-    Isaac.Spawn(EntityType.ENTITY_BOMBDROP, BombVariant.BOMB_TROLL, 0, Vector( player.Position.X - 50, player.Position.Y ), Vector(0, 0), player)
+    Isaac.Spawn(EntityType.ENTITY_BOMBDROP, BombVariant.BOMB_TROLL, 0, Vector( player.Position.X - offset, player.Position.Y ), Vector(0, 0), player)
 end
 
 --[[ Spawn a random pickup from mods' pickup pool ]]
@@ -360,7 +360,7 @@ function LootboxesMod:SpawnRewardItem( tier )
     local tier_roll = math.floor( math.random( min, max ) );
     LootboxesMod:eLogWrite( "tier roll = " .. tier_roll );
 
-    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, rankings[tier_roll], Isaac.GetFreeNearPosition(player.Position, offset), Vector(0,0), nil )
+    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, rankings[tier_roll], Isaac.GetFreeNearPosition(player.Position, offset), v0, nil )
 
 end
 
