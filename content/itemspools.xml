@@ -1,3 +1,8 @@
 <ItemPools>
-
+    <Pool Name="treasure">
+        <Item Name="Lootbox" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+    </Pool>
+    <Pool Name="shop">
+        <Item Name="Lootbox" Weight="1" DecreaseBy="1" RemoveOn="0.1" />
+    </Pool>
 </ItemPools>
