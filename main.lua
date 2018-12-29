@@ -164,11 +164,10 @@ function LootboxesMod:eLogWrite(str)
 end
 LootboxesMod:AddCallback(ModCallbacks.MC_POST_RENDER, LootboxesMod.eLogDraw);
 
-
 --[[This will spawn the item at the begining of the run ]]
 function LootboxesMod:onUpdate(player)
     if Game():GetFrameCount() == 1 then
-        --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.COLLECTIBLE_LOOTBOX, Vector(320,300), v0, nil )
+        Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.COLLECTIBLE_LOOTBOX, Vector(320,300), v0, nil )
         --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_TRASH, Vector(220,300), v0, nil )
         --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_COMMON, Vector(270,300), v0, nil )
         --Isaac.Spawn( EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, LootboxesMod.LOOTCHEST_RARE, Vector(320,300), v0, nil )
@@ -177,7 +176,6 @@ function LootboxesMod:onUpdate(player)
     end
 end
 LootboxesMod:AddCallback( ModCallbacks.MC_POST_PEFFECT_UPDATE, LootboxesMod.onUpdate );
-
 
 --[[ Use Item callback handler for The Lootbox ]]
 function LootboxesMod:UseLootbox()
@@ -220,7 +218,6 @@ function LootboxesMod:PickLootChest( luck )
     end
     return retChest
 end
-
 
 --[[ After picking up loot chest, remove it from passive and open the chest]]
 function LootboxesMod:pickupUpdate( pickup )
