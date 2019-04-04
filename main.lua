@@ -122,7 +122,7 @@ if not __eidItemDescriptions then
     __eidItemDescriptions = {};
   end
   -- 3. Add the description
-  __eidItemDescriptions[LootboxesMod.COLLECTIBLE_LOOTBOX] = "Open a lookbox. Pay 25g or lose item after use";
+  __eidItemDescriptions[LootboxesMod.COLLECTIBLE_LOOTBOX] = "Open a loot box. Pay 25g or lose item after use";
   __eidItemDescriptions[LootboxesMod.LOOTCHEST_TRASH]     = "Poor quality chest";
   __eidItemDescriptions[LootboxesMod.LOOTCHEST_COMMON]    = "Standard quality chest";
   __eidItemDescriptions[LootboxesMod.LOOTCHEST_RARE]      = "Good quality chest";
